@@ -1,7 +1,8 @@
 //require methods to get the different modules
 const fs = require('fs');
-const generatePage = require('./src/page-template.js');
 const inquirer = require('inquirer');
+const generatePage = require('./src/page-template.js');
+
 
 //Function to prompt for user's info
 const promptUser = () => {
@@ -42,13 +43,14 @@ const promptUser = () => {
 			type: 'input',
 			name: 'about',
 			message: 'Provide some information about yourself:',
-      when: ({confirmAbout}) => {
-				if (confirmAbout){
-					return true;
-				} else {
-					return false;
-				}
-			}
+      when: ({confirmAbout}) => confirmAbout
+      // {
+			// 	if (confirmAbout){
+			// 		return true;
+			// 	} else {
+			// 		return false;
+			// 	}
+			// }
 		}
   ]);
 };
@@ -66,8 +68,8 @@ Add a New Project
   if (!portfolioData.projects) {
     portfolioData.projects = [];
   }
-  
-  return inquirer.prompt([
+  return inquirer
+    .prompt([
     {
       type: 'input',
       name: 'name',
@@ -186,14 +188,24 @@ Add a New Project
 
 // const pageHTML = generatePage(mockData);
 
-
 promptUser()
   .then(promptProject)
   .then(portfolioData => {
     const pageHTML = generatePage(portfolioData);
     
-    fs.writeFile('index.html', pageHTML, err => {
-      if (err) throw err;
-      console.log('Portfolio complete! Check out index.html to see the output');
+    fs.writeFile('./dist/index.html', pageHTML, err => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      console.log('Portfolio complete! Check out index.html to see the output!');
+
+      fs.copyFile('./src/style.css', './dist/style.css', (err) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        console.log('Style sheet copied successdully!');
+      });
     });
   });
