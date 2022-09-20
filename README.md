@@ -4,3 +4,5 @@ This project is a Portfolio Generator built using Node.js and JavaScript. The pr
 
 
 - [GitHub Repository](https://github.com/AlexJCturbo/portfolio-generator).
+
+- [Deployed Link](https://alexjcturbo.github.io/portfolio-generator/).
