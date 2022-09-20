@@ -1,7 +1,7 @@
 //require methods to get the different modules
-const fs = require('fs');
 const inquirer = require('inquirer');
 const generatePage = require('./src/page-template.js');
+const {writeFile, copyFile} = require('./utils/generate-site.js');
 
 
 //Function to prompt for user's info
@@ -105,7 +105,7 @@ Add a New Project
     {
       type: 'input',
       name: 'link',
-      message: 'Enter the GitHub link to your project (Required);',
+      message: 'Enter the GitHub link to your project (Required):',
       validate: linkInput => {
         if (linkInput) {
           return true;
@@ -138,74 +138,22 @@ Add a New Project
   })
 }
 
-
-//MOCK DATA STARTS 
-// const mockData = {
-//   name: 'Lernantino',
-//   github: 'lernantino',
-//   confirmAbout: true,
-//   about:
-//     'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et.',
-//   projects: [
-//     {
-//       name: 'Run Buddy',
-//       description:
-//         'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et. Nam fringilla elit dapibus pellentesque cursus.',
-//       languages: ['HTML', 'CSS'],
-//       link: 'https://github.com/lernantino/run-buddy',
-//       feature: true,
-//       confirmAddProject: true
-//     },
-//     {
-//       name: 'Taskinator',
-//       description:
-//         'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et. Nam fringilla elit dapibus pellentesque cursus.',
-//       languages: ['JavaScript', 'HTML', 'CSS'],
-//       link: 'https://github.com/lernantino/taskinator',
-//       feature: true,
-//       confirmAddProject: true
-//     },
-//     {
-//       name: 'Taskmaster Pro',
-//       description:
-//         'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et. Nam fringilla elit dapibus pellentesque cursus.',
-//       languages: ['JavaScript', 'jQuery', 'CSS', 'HTML', 'Bootstrap'],
-//       link: 'https://github.com/lernantino/taskmaster-pro',
-//       feature: false,
-//       confirmAddProject: true
-//     },
-//     {
-//       name: 'Robot Gladiators',
-//       description:
-//         'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque.',
-//       languages: ['JavaScript'],
-//       link: 'https://github.com/lernantino/robot-gladiators',
-//       feature: false,
-//       confirmAddProject: false
-//     }
-//   ]
-// };
-
-// const pageHTML = generatePage(mockData);
-
 promptUser()
   .then(promptProject)
   .then(portfolioData => {
-    const pageHTML = generatePage(portfolioData);
-    
-    fs.writeFile('./dist/index.html', pageHTML, err => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      console.log('Portfolio complete! Check out index.html to see the output!');
-
-      fs.copyFile('./src/style.css', './dist/style.css', (err) => {
-        if (err) {
-          console.log(err);
-          return;
-        }
-        console.log('Style sheet copied successdully!');
-      });
-    });
+    return generatePage(portfolioData);
+  })
+  .then(pageHTML => {
+    return writeFile(pageHTML);
+  })
+  .then(writeFileResponse => {
+    console.log(writeFileResponse);
+    return copyFile();
+  })
+  .then(copyFileResponse => {
+    console.log(copyFileResponse);
+  })
+  .catch(err => {
+    console.log(err);
   });
+  
