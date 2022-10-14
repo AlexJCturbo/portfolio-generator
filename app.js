@@ -8,7 +8,7 @@ const {writeFile, copyFile} = require('./utils/generate-site.js');
 const promptUser = () => {
   return inquirer.prompt([
     {
-      typer: 'input',
+      type: 'input',
       name: 'name',
       message: 'What is your name?',
       validate: nameInput => {
