@@ -22,7 +22,7 @@ So THAT I can generate an HTML portfolio page with the projects I have developed
 ###### [Back to Index](#Table-of-Contents)
 
 ## Screenshot
-![]()
+![HTML page generated with the application](./dist/images/portfolio_generator_screenshot.png)
 ###### [Back to Index](#Table-of-Contents)
 
 
